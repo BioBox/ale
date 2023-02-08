@@ -1,0 +1,8 @@
+Before:
+  call ale#assert#SetUpLinterTest('moon', 'moonc')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'moonc', ale#Escape('moonc') . ' -lp %s'

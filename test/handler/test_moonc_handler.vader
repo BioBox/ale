@@ -1,0 +1,37 @@
+Before:
+  runtime ale_linters/moon/moonc.vim
+
+After:
+  Restore
+  call ale#linter#Reset()
+
+Execute(The moonc handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'text': 'accessing global `tpos`',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'text': 'assigned but unused `uin`',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 5,
+  \     'text': 'Failed to parse',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#moon#moonc#Handle(348, [
+  \   "file.moon\n\nline 6: accessing global `tpos`\n" .
+  \     "================\n" .
+  \     ">    @tpos = tpos",
+  \   "line 2: assigned but unused `uin`\n" .
+  \     "================\n" .
+  \     "> uin = require \"user-input-module\"",
+  \   "Failed to parse:\n" .
+  \     " [5] >>  new: (local tpos, loop_state) =>",
+  \ ])
+
